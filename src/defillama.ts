@@ -74,6 +74,8 @@ type Chain = {
 
 // List all protocols with their TVL
 defillama.get("/protocols", async (c) => {
+	const { search } = c.req.query();
+
 	const response = await fetch("https://api.llama.fi/protocols");
 
 	if (!response.ok) {
@@ -82,8 +84,17 @@ defillama.get("/protocols", async (c) => {
 
 	const data = (await response.json()) as Protocol[];
 
+	// Filter by search term if provided
+	const filteredData = search
+		? data.filter((protocol) =>
+			protocol.name.toLowerCase().includes(search.toLowerCase()) ||
+			protocol.symbol?.toLowerCase().includes(search.toLowerCase()) ||
+			protocol.category.toLowerCase().includes(search.toLowerCase())
+		)
+		: data;
+
 	return c.json(
-		data.map((protocol) => ({
+		filteredData.map((protocol) => ({
 			id: protocol.id,
 			name: protocol.name,
 			symbol: protocol.symbol || "",
@@ -152,6 +163,8 @@ defillama.get("/protocol/:slug/tvl", async (c) => {
 
 // Get all chains with their TVL
 defillama.get("/chains", async (c) => {
+	const { search } = c.req.query();
+
 	const response = await fetch("https://api.llama.fi/v2/chains");
 
 	if (!response.ok) {
@@ -160,8 +173,16 @@ defillama.get("/chains", async (c) => {
 
 	const data = (await response.json()) as Chain[];
 
+	// Filter by search term if provided
+	const filteredData = search
+		? data.filter((chain) =>
+			chain.name.toLowerCase().includes(search.toLowerCase()) ||
+			chain.tokenSymbol?.toLowerCase().includes(search.toLowerCase())
+		)
+		: data;
+
 	return c.json(
-		data.map((chain) => ({
+		filteredData.map((chain) => ({
 			name: chain.name,
 			tvl: chain.tvl,
 			tokenSymbol: chain.tokenSymbol || "",
@@ -287,6 +308,8 @@ defillama.get("/charts/protocol/:slug", async (c) => {
 
 // List all stablecoins with their circulating amounts
 defillama.get("/stablecoins", async (c) => {
+	const { search } = c.req.query();
+
 	const response = await fetch("https://stablecoins.llama.fi/stablecoins?includePrices=true");
 
 	if (!response.ok) {
@@ -295,8 +318,16 @@ defillama.get("/stablecoins", async (c) => {
 
 	const data = (await response.json()) as any;
 
+	// Filter by search term if provided
+	const filteredAssets = search
+		? data.peggedAssets.filter((stablecoin: any) =>
+			stablecoin.name.toLowerCase().includes(search.toLowerCase()) ||
+			stablecoin.symbol.toLowerCase().includes(search.toLowerCase())
+		)
+		: data.peggedAssets;
+
 	return c.json(
-		data.peggedAssets.map((stablecoin: any) => ({
+		filteredAssets.map((stablecoin: any) => ({
 			id: stablecoin.id,
 			name: stablecoin.name,
 			symbol: stablecoin.symbol,
@@ -384,6 +415,8 @@ defillama.get("/stablecoins/charts/all", async (c) => {
 
 // Get all yield pools with APY data
 defillama.get("/yields/pools", async (c) => {
+	const { search } = c.req.query();
+
 	const response = await fetch("https://yields.llama.fi/pools");
 
 	if (!response.ok) {
@@ -392,8 +425,17 @@ defillama.get("/yields/pools", async (c) => {
 
 	const data = (await response.json()) as any;
 
+	// Filter by search term if provided
+	const filteredPools = search
+		? data.data.filter((pool: any) =>
+			pool.project?.toLowerCase().includes(search.toLowerCase()) ||
+			pool.symbol?.toLowerCase().includes(search.toLowerCase()) ||
+			pool.chain?.toLowerCase().includes(search.toLowerCase())
+		)
+		: data.data;
+
 	return c.json(
-		data.data.map((pool: any) => ({
+		filteredPools.map((pool: any) => ({
 			pool: pool.pool,
 			chain: pool.chain,
 			project: pool.project,
@@ -444,6 +486,8 @@ defillama.get("/yields/chart/:pool", async (c) => {
 
 // List all DEXs with volume summaries
 defillama.get("/dexs", async (c) => {
+	const { search } = c.req.query();
+
 	const response = await fetch("https://api.llama.fi/overview/dexs");
 
 	if (!response.ok) {
@@ -452,8 +496,16 @@ defillama.get("/dexs", async (c) => {
 
 	const data = (await response.json()) as any;
 
+	// Filter by search term if provided
+	const filteredProtocols = search
+		? data.protocols.filter((dex: any) =>
+			dex.name.toLowerCase().includes(search.toLowerCase()) ||
+			dex.displayName?.toLowerCase().includes(search.toLowerCase())
+		)
+		: data.protocols;
+
 	return c.json(
-		data.protocols.map((dex: any) => ({
+		filteredProtocols.map((dex: any) => ({
 			defillamaId: dex.defillamaId,
 			name: dex.name,
 			displayName: dex.displayName,

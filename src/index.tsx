@@ -11,8 +11,6 @@ app.use(renderer);
 app.use(
 	cors({
 		origin: ["https://pro.openbb.co", "https://excel.openbb.co", "http://localhost:1420", "https://pro.openbb.dev"],
-		allowedHeaders: ["Content-Type", "Authorization"],
-		methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
 	})
 );
 
@@ -51,7 +49,7 @@ app.get("/", (c) => {
 					<div style="display: flex; flex-direction: column; align-items: center;"
 						class="container max-w-3xl px-4 flex flex-col items-center">
 						<div class="flex items-center gap-2 text-xl font-bold text-white mb-6">
-							<img src="https://defillama.com/llama.png" alt="DefiLlama" class="h-20 w-auto" />
+							<img src="https://defillama.com/icons/defillama.webp" alt="DefiLlama" class="h-20 w-auto" />
 						</div>
 
 						<div class="text-center space-y-4 mb-8">
@@ -76,7 +74,7 @@ app.get("/", (c) => {
 										<li>
 											<strong>URL</strong>:
 											<span class="inline-flex items-center gap-2">
-												<code class="ml-1 bg-gray-700 text-gray-200 px-1 py-0.5 rounded">https://openbb-defillama.YOUR-DOMAIN.workers.dev</code>
+												<code class="ml-1 bg-gray-700 text-gray-200 px-1 py-0.5 rounded">https://</code>
 												<button
 													id="copyUrlBtn"
 													class="text-gray-400 hover:text-white transition-colors duration-200"
@@ -101,7 +99,7 @@ app.get("/", (c) => {
 
 						<div class="flex flex-col gap-4 items-center mt-6">
 							<a href="https://api-docs.defillama.com/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors duration-200 shadow-lg hover:shadow-xl">
-								API Documentation
+								Defillama API Documentation
 							</a>
 							<a href="https://github.com/YOUR-USERNAME/openbb-defillama" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-6 py-3 bg-white text-gray-900 font-semibold rounded-lg hover:bg-gray-100 transition-colors duration-200 shadow-lg hover:shadow-xl">
 								<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -454,35 +452,70 @@ app.get("/widgets.json", (c) => {
 			description: "Search and filter DeFi protocols by name, category, or chain",
 			source: "DefiLlama",
 			endpoint: "/defillama/protocols",
-			params: [],
+			params: [
+				{
+					paramName: "search",
+					description: "Search protocols by name",
+					type: "text",
+					value: "",
+				},
+			],
 		},
 		search_chains: {
 			name: "Search Chains",
 			description: "Search and filter blockchain networks by name or TVL",
 			source: "DefiLlama",
 			endpoint: "/defillama/chains",
-			params: [],
+			params: [
+				{
+					paramName: "search",
+					description: "Search chains by name",
+					type: "text",
+					value: "",
+				},
+			],
 		},
 		search_stablecoins: {
 			name: "Search Stablecoins",
 			description: "Search and filter stablecoins by name or symbol",
 			source: "DefiLlama",
 			endpoint: "/defillama/stablecoins",
-			params: [],
+			params: [
+				{
+					paramName: "search",
+					description: "Search stablecoins by name or symbol",
+					type: "text",
+					value: "",
+				},
+			],
 		},
 		search_dexs: {
 			name: "Search DEXs",
 			description: "Search and filter decentralized exchanges by name or chain",
 			source: "DefiLlama",
 			endpoint: "/defillama/dexs",
-			params: [],
+			params: [
+				{
+					paramName: "search",
+					description: "Search DEXs by name",
+					type: "text",
+					value: "",
+				},
+			],
 		},
 		search_yields: {
 			name: "Search Yield Pools",
 			description: "Search and filter yield farming pools by project, chain, or APY",
 			source: "DefiLlama",
 			endpoint: "/defillama/yields/pools",
-			params: [],
+			params: [
+				{
+					paramName: "search",
+					description: "Search pools by project or symbol",
+					type: "text",
+					value: "",
+				},
+			],
 		},
 
 		// TVL Widgets

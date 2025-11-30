@@ -123,9 +123,80 @@ app.get("/apps.json", (c) => {
 		"img": "https://defillama.com/llama.png",
 		"img_dark": "https://defillama.com/llama.png",
 		"img_light": "https://defillama.com/llama.png",
-		"description": "An OpenBB Workspace app that connects to the DefiLlama API, enabling the integration of DeFi TVL data and analytics. It defines widgets for visualizing protocol TVL, chain analytics, and historical DeFi metrics within the OpenBB Workspace interface.",
+		"description": "Comprehensive DeFi analytics platform powered by DefiLlama API. Search and analyze protocols, chains, stablecoins, DEXs, and yield pools. Track TVL, volumes, fees, bridges, options, security incidents, fundraising, and more across the entire DeFi ecosystem.",
 		"allowCustomization": true,
 		"tabs": {
+			"search": {
+				"id": "search",
+				"name": "Search",
+				"layout": [
+					{
+						"i": "search_protocols",
+						"x": 0,
+						"y": 0,
+						"w": 20,
+						"h": 20,
+						"state": {
+							"chartView": {
+								"enabled": false,
+								"chartType": "line"
+							}
+						}
+					},
+					{
+						"i": "search_chains",
+						"x": 20,
+						"y": 0,
+						"w": 20,
+						"h": 20,
+						"state": {
+							"chartView": {
+								"enabled": false,
+								"chartType": "line"
+							}
+						}
+					},
+					{
+						"i": "search_stablecoins",
+						"x": 0,
+						"y": 20,
+						"w": 20,
+						"h": 15,
+						"state": {
+							"chartView": {
+								"enabled": false,
+								"chartType": "line"
+							}
+						}
+					},
+					{
+						"i": "search_dexs",
+						"x": 20,
+						"y": 20,
+						"w": 20,
+						"h": 15,
+						"state": {
+							"chartView": {
+								"enabled": false,
+								"chartType": "line"
+							}
+						}
+					},
+					{
+						"i": "search_yields",
+						"x": 0,
+						"y": 35,
+						"w": 40,
+						"h": 15,
+						"state": {
+							"chartView": {
+								"enabled": false,
+								"chartType": "line"
+							}
+						}
+					}
+				]
+			},
 			"overview": {
 				"id": "overview",
 				"name": "Overview",
@@ -170,6 +241,204 @@ app.get("/apps.json", (c) => {
 						}
 					}
 				]
+			},
+			"stablecoins": {
+				"id": "stablecoins",
+				"name": "Stablecoins",
+				"layout": [
+					{
+						"i": "stablecoins_list",
+						"x": 0,
+						"y": 0,
+						"w": 40,
+						"h": 18,
+						"state": {
+							"chartView": {
+								"enabled": false,
+								"chartType": "line"
+							}
+						}
+					},
+					{
+						"i": "stablecoins_chart",
+						"x": 0,
+						"y": 18,
+						"w": 40,
+						"h": 14,
+						"state": {
+							"chartView": {
+								"enabled": true,
+								"chartType": "line"
+							}
+						}
+					},
+					{
+						"i": "stablecoins_by_chain",
+						"x": 0,
+						"y": 32,
+						"w": 40,
+						"h": 12,
+						"state": {
+							"chartView": {
+								"enabled": false,
+								"chartType": "line"
+							}
+						}
+					}
+				]
+			},
+			"yields": {
+				"id": "yields",
+				"name": "Yields",
+				"layout": [
+					{
+						"i": "yields_pools",
+						"x": 0,
+						"y": 0,
+						"w": 40,
+						"h": 25,
+						"state": {
+							"chartView": {
+								"enabled": false,
+								"chartType": "line"
+							}
+						}
+					}
+				]
+			},
+			"dexs": {
+				"id": "dexs",
+				"name": "DEX Volumes",
+				"layout": [
+					{
+						"i": "dexs_list",
+						"x": 0,
+						"y": 0,
+						"w": 40,
+						"h": 25,
+						"state": {
+							"chartView": {
+								"enabled": false,
+								"chartType": "line"
+							}
+						}
+					}
+				]
+			},
+			"fees": {
+				"id": "fees",
+				"name": "Fees & Revenue",
+				"layout": [
+					{
+						"i": "fees_list",
+						"x": 0,
+						"y": 0,
+						"w": 40,
+						"h": 25,
+						"state": {
+							"chartView": {
+								"enabled": false,
+								"chartType": "line"
+							}
+						}
+					}
+				]
+			},
+			"bridges": {
+				"id": "bridges",
+				"name": "Bridges",
+				"layout": [
+					{
+						"i": "bridges_list",
+						"x": 0,
+						"y": 0,
+						"w": 40,
+						"h": 25,
+						"state": {
+							"chartView": {
+								"enabled": false,
+								"chartType": "line"
+							}
+						}
+					}
+				]
+			},
+			"options": {
+				"id": "options",
+				"name": "Options",
+				"layout": [
+					{
+						"i": "options_list",
+						"x": 0,
+						"y": 0,
+						"w": 40,
+						"h": 25,
+						"state": {
+							"chartView": {
+								"enabled": false,
+								"chartType": "line"
+							}
+						}
+					}
+				]
+			},
+			"analytics": {
+				"id": "analytics",
+				"name": "Analytics",
+				"layout": [
+					{
+						"i": "global_tvl_chart",
+						"x": 0,
+						"y": 0,
+						"w": 40,
+						"h": 15,
+						"state": {
+							"chartView": {
+								"enabled": true,
+								"chartType": "line"
+							}
+						}
+					},
+					{
+						"i": "hacks_list",
+						"x": 0,
+						"y": 15,
+						"w": 20,
+						"h": 18,
+						"state": {
+							"chartView": {
+								"enabled": false,
+								"chartType": "line"
+							}
+						}
+					},
+					{
+						"i": "raises_list",
+						"x": 20,
+						"y": 15,
+						"w": 20,
+						"h": 18,
+						"state": {
+							"chartView": {
+								"enabled": false,
+								"chartType": "line"
+							}
+						}
+					},
+					{
+						"i": "treasuries_list",
+						"x": 0,
+						"y": 33,
+						"w": 40,
+						"h": 15,
+						"state": {
+							"chartView": {
+								"enabled": false,
+								"chartType": "line"
+							}
+						}
+					}
+				]
 			}
 		},
 		"groups": []
@@ -179,6 +448,44 @@ app.get("/apps.json", (c) => {
 
 app.get("/widgets.json", (c) => {
 	return c.json({
+		// Search Widgets
+		search_protocols: {
+			name: "Search Protocols",
+			description: "Search and filter DeFi protocols by name, category, or chain",
+			source: "DefiLlama",
+			endpoint: "/defillama/protocols",
+			params: [],
+		},
+		search_chains: {
+			name: "Search Chains",
+			description: "Search and filter blockchain networks by name or TVL",
+			source: "DefiLlama",
+			endpoint: "/defillama/chains",
+			params: [],
+		},
+		search_stablecoins: {
+			name: "Search Stablecoins",
+			description: "Search and filter stablecoins by name or symbol",
+			source: "DefiLlama",
+			endpoint: "/defillama/stablecoins",
+			params: [],
+		},
+		search_dexs: {
+			name: "Search DEXs",
+			description: "Search and filter decentralized exchanges by name or chain",
+			source: "DefiLlama",
+			endpoint: "/defillama/dexs",
+			params: [],
+		},
+		search_yields: {
+			name: "Search Yield Pools",
+			description: "Search and filter yield farming pools by project, chain, or APY",
+			source: "DefiLlama",
+			endpoint: "/defillama/yields/pools",
+			params: [],
+		},
+
+		// TVL Widgets
 		protocols_list: {
 			name: "Protocols List",
 			description: "List all DeFi protocols with their TVL and statistics",
@@ -227,6 +534,311 @@ app.get("/widgets.json", (c) => {
 					description: "Chain name (e.g., 'Ethereum', 'BSC', 'Polygon')",
 					type: "text",
 					value: "Ethereum",
+				},
+			],
+		},
+		categories_list: {
+			name: "DeFi Categories",
+			description: "List all protocol categories with TVL and protocol count",
+			source: "DefiLlama",
+			endpoint: "/defillama/categories",
+			params: [],
+		},
+
+		// Stablecoin Widgets
+		stablecoins_list: {
+			name: "Stablecoins List",
+			description: "List all stablecoins with circulating supply and market cap",
+			source: "DefiLlama",
+			endpoint: "/defillama/stablecoins",
+			params: [],
+		},
+		stablecoin_history: {
+			name: "Stablecoin History",
+			description: "Historical market cap for a specific stablecoin",
+			source: "DefiLlama",
+			endpoint: "/defillama/stablecoin/:asset",
+			params: [
+				{
+					paramName: "asset",
+					description: "Stablecoin ID (e.g., '1' for USDT, '2' for USDC)",
+					type: "text",
+					value: "1",
+				},
+			],
+		},
+		stablecoins_by_chain: {
+			name: "Stablecoins by Chain",
+			description: "Stablecoin market cap distribution across chains",
+			source: "DefiLlama",
+			endpoint: "/defillama/stablecoins/chains",
+			params: [],
+		},
+		stablecoins_chart: {
+			name: "Stablecoins Market Cap Chart",
+			description: "Historical market cap of all stablecoins",
+			source: "DefiLlama",
+			endpoint: "/defillama/charts/stablecoins",
+			type: "chart",
+			params: [],
+		},
+
+		// Yields/APY Widgets
+		yields_pools: {
+			name: "Yield Pools",
+			description: "List all yield farming pools with APY data",
+			source: "DefiLlama",
+			endpoint: "/defillama/yields/pools",
+			params: [],
+		},
+		yield_chart: {
+			name: "Pool APY History",
+			description: "Historical APY chart for a specific pool",
+			source: "DefiLlama",
+			endpoint: "/defillama/yields/chart/:pool",
+			params: [
+				{
+					paramName: "pool",
+					description: "Pool ID (UUID from yields_pools widget)",
+					type: "text",
+					value: "",
+				},
+			],
+		},
+
+		// DEX Volume Widgets
+		dexs_list: {
+			name: "DEX Volumes",
+			description: "List all DEXs with volume statistics",
+			source: "DefiLlama",
+			endpoint: "/defillama/dexs",
+			params: [],
+		},
+		dexs_by_chain: {
+			name: "DEX Volumes by Chain",
+			description: "DEX volumes filtered by blockchain",
+			source: "DefiLlama",
+			endpoint: "/defillama/dexs/:chain",
+			params: [
+				{
+					paramName: "chain",
+					description: "Chain name (e.g., 'Ethereum', 'BSC')",
+					type: "text",
+					value: "Ethereum",
+				},
+			],
+		},
+		dex_summary: {
+			name: "DEX Volume Summary",
+			description: "Detailed volume data for a specific DEX",
+			source: "DefiLlama",
+			endpoint: "/defillama/dexs/summary/:protocol",
+			params: [
+				{
+					paramName: "protocol",
+					description: "DEX protocol name (e.g., 'uniswap', 'pancakeswap')",
+					type: "text",
+					value: "uniswap",
+				},
+			],
+		},
+		dex_chart: {
+			name: "DEX Volume Chart",
+			description: "Historical volume chart for a DEX",
+			source: "DefiLlama",
+			endpoint: "/defillama/charts/dex/:protocol",
+			type: "chart",
+			params: [
+				{
+					paramName: "protocol",
+					description: "DEX protocol name (e.g., 'uniswap')",
+					type: "text",
+					value: "uniswap",
+				},
+			],
+		},
+
+		// Fees & Revenue Widgets
+		fees_list: {
+			name: "Protocol Fees & Revenue",
+			description: "List all protocols with fees and revenue data",
+			source: "DefiLlama",
+			endpoint: "/defillama/fees",
+			params: [],
+		},
+		fees_by_chain: {
+			name: "Fees by Chain",
+			description: "Protocol fees filtered by blockchain",
+			source: "DefiLlama",
+			endpoint: "/defillama/fees/:chain",
+			params: [
+				{
+					paramName: "chain",
+					description: "Chain name (e.g., 'Ethereum', 'Arbitrum')",
+					type: "text",
+					value: "Ethereum",
+				},
+			],
+		},
+		fees_summary: {
+			name: "Protocol Fees Summary",
+			description: "Detailed fees data for a specific protocol",
+			source: "DefiLlama",
+			endpoint: "/defillama/fees/summary/:protocol",
+			params: [
+				{
+					paramName: "protocol",
+					description: "Protocol name (e.g., 'uniswap', 'aave')",
+					type: "text",
+					value: "uniswap",
+				},
+			],
+		},
+		fees_chart: {
+			name: "Protocol Fees Chart",
+			description: "Historical fees chart for a protocol",
+			source: "DefiLlama",
+			endpoint: "/defillama/charts/fees/:protocol",
+			type: "chart",
+			params: [
+				{
+					paramName: "protocol",
+					description: "Protocol name (e.g., 'uniswap')",
+					type: "text",
+					value: "uniswap",
+				},
+			],
+		},
+
+		// Bridges Widgets
+		bridges_list: {
+			name: "Cross-Chain Bridges",
+			description: "List all cross-chain bridges with volume data",
+			source: "DefiLlama",
+			endpoint: "/defillama/bridges",
+			params: [],
+		},
+		bridge_details: {
+			name: "Bridge Details",
+			description: "Detailed information for a specific bridge",
+			source: "DefiLlama",
+			endpoint: "/defillama/bridge/:id",
+			params: [
+				{
+					paramName: "id",
+					description: "Bridge ID (numeric, e.g., '1' for Polygon Bridge)",
+					type: "text",
+					value: "1",
+				},
+			],
+		},
+
+		// Security & Hacks Widgets
+		hacks_list: {
+			name: "DeFi Hacks & Exploits",
+			description: "List all security incidents and hacks in DeFi",
+			source: "DefiLlama",
+			endpoint: "/defillama/hacks",
+			params: [],
+		},
+
+		// Raises/Funding Widgets
+		raises_list: {
+			name: "Protocol Fundraising",
+			description: "List all protocol funding rounds and raises",
+			source: "DefiLlama",
+			endpoint: "/defillama/raises",
+			params: [],
+		},
+
+		// Treasuries Widgets
+		treasuries_list: {
+			name: "Protocol Treasuries",
+			description: "List all protocol treasury holdings",
+			source: "DefiLlama",
+			endpoint: "/defillama/treasuries",
+			params: [],
+		},
+
+		// Options/Derivatives Widgets
+		options_list: {
+			name: "Options Protocols",
+			description: "List all options and derivatives protocols",
+			source: "DefiLlama",
+			endpoint: "/defillama/options",
+			params: [],
+		},
+		options_by_chain: {
+			name: "Options by Chain",
+			description: "Options protocols filtered by blockchain",
+			source: "DefiLlama",
+			endpoint: "/defillama/options/:chain",
+			params: [
+				{
+					paramName: "chain",
+					description: "Chain name (e.g., 'Ethereum', 'Arbitrum')",
+					type: "text",
+					value: "Ethereum",
+				},
+			],
+		},
+		options_summary: {
+			name: "Options Protocol Summary",
+			description: "Detailed volume data for a specific options protocol",
+			source: "DefiLlama",
+			endpoint: "/defillama/options/summary/:protocol",
+			params: [
+				{
+					paramName: "protocol",
+					description: "Protocol name (e.g., 'dydx', 'lyra')",
+					type: "text",
+					value: "dydx",
+				},
+			],
+		},
+
+		// Global Charts
+		global_tvl_chart: {
+			name: "Global DeFi TVL Chart",
+			description: "Historical chart of total DeFi TVL across all chains",
+			source: "DefiLlama",
+			endpoint: "/defillama/charts/global-tvl",
+			type: "chart",
+			params: [],
+		},
+
+		// Token Prices
+		token_prices_current: {
+			name: "Current Token Prices",
+			description: "Get current prices for tokens by contract address",
+			source: "DefiLlama",
+			endpoint: "/defillama/prices/current/:coins",
+			params: [
+				{
+					paramName: "coins",
+					description: "Comma-separated list of coins in format 'chain:address' (e.g., 'ethereum:0x0000000000000000000000000000000000000000')",
+					type: "text",
+					value: "ethereum:0x0000000000000000000000000000000000000000",
+				},
+			],
+		},
+		token_prices_historical: {
+			name: "Historical Token Prices",
+			description: "Get historical prices for tokens at a specific timestamp",
+			source: "DefiLlama",
+			endpoint: "/defillama/prices/historical/:timestamp/:coins",
+			params: [
+				{
+					paramName: "timestamp",
+					description: "Unix timestamp (seconds)",
+					type: "text",
+					value: "1648680149",
+				},
+				{
+					paramName: "coins",
+					description: "Comma-separated list of coins in format 'chain:address'",
+					type: "text",
+					value: "ethereum:0x0000000000000000000000000000000000000000",
 				},
 			],
 		},

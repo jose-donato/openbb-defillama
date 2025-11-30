@@ -118,9 +118,9 @@ app.get("/", (c) => {
 app.get("/apps.json", (c) => {
 	return c.json([{
 		"name": "DefiLlama",
-		"img": "https://defillama.com/llama.png",
-		"img_dark": "https://defillama.com/llama.png",
-		"img_light": "https://defillama.com/llama.png",
+		"img": "https://cdn.prod.website-files.com/67ed326db9d26b1dc1df7929/68017c18f1ea2ec0700cca5e_653ef3f92944e7d505ca0e91_DefiLlama%2520Logo.webp",
+		"img_dark": "https://cdn.prod.website-files.com/67ed326db9d26b1dc1df7929/68017c18f1ea2ec0700cca5e_653ef3f92944e7d505ca0e91_DefiLlama%2520Logo.webp",
+		"img_light": "https://cdn.prod.website-files.com/67ed326db9d26b1dc1df7929/68017c18f1ea2ec0700cca5e_653ef3f92944e7d505ca0e91_DefiLlama%2520Logo.webp",
 		"description": "Comprehensive DeFi analytics platform powered by DefiLlama API. Search and analyze protocols, chains, stablecoins, DEXs, and yield pools. Track TVL, volumes, fees, bridges, options, security incidents, fundraising, and more across the entire DeFi ecosystem.",
 		"allowCustomization": true,
 		"tabs": {
@@ -200,9 +200,22 @@ app.get("/apps.json", (c) => {
 				"name": "Overview",
 				"layout": [
 					{
-						"i": "protocols_list",
+						"i": "global_tvl_chart",
 						"x": 0,
 						"y": 0,
+						"w": 40,
+						"h": 15,
+						"state": {
+							"chartView": {
+								"enabled": false,
+								"chartType": "line"
+							}
+						}
+					},
+					{
+						"i": "protocols_list",
+						"x": 0,
+						"y": 15,
 						"w": 40,
 						"h": 20,
 						"state": {
@@ -215,7 +228,7 @@ app.get("/apps.json", (c) => {
 					{
 						"i": "chains_list",
 						"x": 0,
-						"y": 20,
+						"y": 35,
 						"w": 40,
 						"h": 12,
 						"state": {
@@ -228,7 +241,7 @@ app.get("/apps.json", (c) => {
 					{
 						"i": "chains_chart",
 						"x": 0,
-						"y": 32,
+						"y": 47,
 						"w": 40,
 						"h": 15,
 						"state": {
@@ -380,25 +393,6 @@ app.get("/apps.json", (c) => {
 					}
 				]
 			},
-			"analytics": {
-				"id": "analytics",
-				"name": "Analytics",
-				"layout": [
-					{
-						"i": "global_tvl_chart",
-						"x": 0,
-						"y": 0,
-						"w": 40,
-						"h": 15,
-						"state": {
-							"chartView": {
-								"enabled": false,
-								"chartType": "line"
-							}
-						}
-					}
-				]
-			},
 			"open_interest": {
 				"id": "open_interest",
 				"name": "Open Interest",
@@ -454,6 +448,25 @@ app.get("/apps.json", (c) => {
 								"chartType": "line"
 							}
 						}
+					}
+				]
+			},
+			"website": {
+				"id": "website",
+				"name": "Website",
+				"layout": [
+					{
+						"i": "iframe",
+						"x": 0,
+						"y": 2,
+						"w": 40,
+						"h": 33,
+						"state": {
+							"storage": {
+								"html": "https://defillama.com"
+							}
+						},
+						"groups": []
 					}
 				]
 			}

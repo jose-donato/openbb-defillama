@@ -437,6 +437,64 @@ app.get("/apps.json", (c) => {
 						}
 					}
 				]
+			},
+			"open_interest": {
+				"id": "open_interest",
+				"name": "Open Interest",
+				"layout": [
+					{
+						"i": "open_interest_stats",
+						"x": 0,
+						"y": 0,
+						"w": 40,
+						"h": 10,
+						"state": {
+							"chartView": {
+								"enabled": false,
+								"chartType": "line"
+							}
+						}
+					},
+					{
+						"i": "open_interest_chart_total",
+						"x": 0,
+						"y": 10,
+						"w": 40,
+						"h": 15,
+						"state": {
+							"chartView": {
+								"enabled": false,
+								"chartType": "line"
+							}
+						}
+					},
+					{
+						"i": "open_interest_chart_breakdown",
+						"x": 0,
+						"y": 25,
+						"w": 40,
+						"h": 15,
+						"state": {
+							"chartView": {
+								"enabled": false,
+								"chartType": "line"
+							}
+						}
+					},
+					{
+						"i": "open_interest_protocols",
+						"x": 0,
+						"y": 40,
+						"w": 40,
+						"h": 20,
+						"state": {
+							"chartView": {
+								"enabled": false,
+								"chartType": "line"
+							}
+						}
+					}
+				]
 			}
 		},
 		"groups": []
@@ -868,6 +926,43 @@ app.get("/widgets.json", (c) => {
 					value: "ethereum:0x0000000000000000000000000000000000000000",
 				},
 			],
+		},
+
+		// Open Interest Widgets
+		open_interest_stats: {
+			name: "Open Interest Statistics",
+			description: "Key metrics and statistics for open interest",
+			source: "DefiLlama",
+			endpoint: "/defillama/open-interest/stats",
+			params: [],
+		},
+		open_interest_protocols: {
+			name: "Open Interest Protocols",
+			description: "List all protocols with open interest data",
+			source: "DefiLlama",
+			endpoint: "/defillama/open-interest/protocols",
+			params: [
+				{
+					paramName: "search",
+					description: "Search protocols by name",
+					type: "text",
+					value: "",
+				},
+			],
+		},
+		open_interest_chart_total: {
+			name: "Open Interest Total Chart",
+			description: "Historical total open interest data",
+			source: "DefiLlama",
+			endpoint: "/defillama/open-interest/chart/total",
+			params: [],
+		},
+		open_interest_chart_breakdown: {
+			name: "Open Interest Breakdown Chart",
+			description: "Historical open interest breakdown by protocol",
+			source: "DefiLlama",
+			endpoint: "/defillama/open-interest/chart/breakdown",
+			params: [],
 		},
 	});
 });

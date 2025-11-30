@@ -930,6 +930,138 @@ defillama.get("/options/summary/:protocol", async (c) => {
 });
 
 // ============================================
+// OPEN INTEREST ENDPOINTS
+// ============================================
+
+// Get open interest overview and statistics
+defillama.get("/open-interest", async (c) => {
+	const response = await fetch("https://api.llama.fi/overview/open-interest");
+
+	if (!response.ok) {
+		return c.json({ error: "Failed to fetch open interest data" }, 500);
+	}
+
+	const data = (await response.json()) as any;
+
+	return c.json(data);
+});
+
+// Get open interest protocols table
+defillama.get("/open-interest/protocols", async (c) => {
+	const { search } = c.req.query();
+
+	const response = await fetch("https://api.llama.fi/overview/open-interest");
+
+	if (!response.ok) {
+		return c.json({ error: "Failed to fetch open interest protocols" }, 500);
+	}
+
+	const data = (await response.json()) as any;
+
+	const filteredProtocols = search
+		? data.protocols.filter((protocol: any) =>
+			protocol.name.toLowerCase().includes(search.toLowerCase()) ||
+			protocol.displayName?.toLowerCase().includes(search.toLowerCase())
+		)
+		: data.protocols;
+
+	return c.json(
+		filteredProtocols.map((protocol: any) => ({
+			name: protocol.name,
+			displayName: protocol.displayName,
+			total24h: protocol.total24h || 0,
+			total7d: protocol.total7d || 0,
+			change_1d: protocol.change_1d || 0,
+			change_7d: protocol.change_7d || 0,
+			chains: protocol.chains?.join(", ") || "",
+		}))
+	);
+});
+
+// Get open interest total data chart
+defillama.get("/open-interest/chart/total", async (c) => {
+	const response = await fetch("https://api.llama.fi/overview/open-interest");
+
+	if (!response.ok) {
+		return c.json({ error: "Failed to fetch open interest chart data" }, 500);
+	}
+
+	const data = (await response.json()) as any;
+
+	return c.json(
+		data.totalDataChart?.map((point: any) => ({
+			date: new Date(point[0] * 1000).toISOString().split("T")[0],
+			timestamp: point[0],
+			value: point[1],
+		})) || []
+	);
+});
+
+// Get open interest breakdown chart data
+defillama.get("/open-interest/chart/breakdown", async (c) => {
+	const response = await fetch("https://api.llama.fi/overview/open-interest");
+
+	if (!response.ok) {
+		return c.json({ error: "Failed to fetch open interest breakdown" }, 500);
+	}
+
+	const data = (await response.json()) as any;
+
+	if (!data.totalDataChartBreakdown || data.totalDataChartBreakdown.length === 0) {
+		return c.json([]);
+	}
+
+	return c.json(
+		data.totalDataChartBreakdown.map((point: any) => ({
+			date: new Date(point[0] * 1000).toISOString().split("T")[0],
+			timestamp: point[0],
+			...point[1],
+		}))
+	);
+});
+
+// Get open interest stats
+defillama.get("/open-interest/stats", async (c) => {
+	const response = await fetch("https://api.llama.fi/overview/open-interest");
+
+	if (!response.ok) {
+		return c.json({ error: "Failed to fetch open interest stats" }, 500);
+	}
+
+	const data = (await response.json()) as any;
+
+	const latestTotal = data.totalDataChart?.[data.totalDataChart.length - 1]?.[1] || 0;
+	const previousTotal = data.totalDataChart?.[data.totalDataChart.length - 2]?.[1] || 0;
+	const weekAgoTotal = data.totalDataChart?.[data.totalDataChart.length - 8]?.[1] || 0;
+
+	const change24h = previousTotal ? ((latestTotal - previousTotal) / previousTotal) * 100 : 0;
+	const change7d = weekAgoTotal ? ((latestTotal - weekAgoTotal) / weekAgoTotal) * 100 : 0;
+
+	return c.json([
+		{
+			metric: "Total Open Interest",
+			value: latestTotal,
+		},
+		{
+			metric: "24h Change",
+			value: change24h,
+		},
+		{
+			metric: "7d Change",
+			value: change7d,
+		},
+		{
+			metric: "Total Protocols",
+			value: data.protocols?.length || 0,
+		},
+		{
+			metric: "Total Chains",
+			value: data.allChains?.length || 0,
+		},
+	]);
+});
+
+// ============================================
 // ADDITIONAL USEFUL ENDPOINTS
 // ============================================
 

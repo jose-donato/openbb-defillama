@@ -1,5 +1,39 @@
 import { Hono } from "hono";
 
+// Cache helper function using Cloudflare Cache API
+const fetchWithCache = async (url: string, ttlSeconds = 300): Promise<any> => {
+	const cache = caches.default;
+	const cacheKey = new Request(url);
+
+	// Try to get from cache first
+	let response = await cache.match(cacheKey);
+
+	if (!response) {
+		// Cache miss - fetch from API
+		response = await fetch(url);
+
+		if (response.ok) {
+			// Clone and cache the response
+			const clonedResponse = response.clone();
+			const headers = new Headers(clonedResponse.headers);
+			headers.set("Cache-Control", `public, max-age=${ttlSeconds}`);
+			const cachedResponse = new Response(clonedResponse.body, {
+				status: clonedResponse.status,
+				statusText: clonedResponse.statusText,
+				headers,
+			});
+			// Don't await - cache in background
+			cache.put(cacheKey, cachedResponse);
+		}
+	}
+
+	if (!response.ok) {
+		throw new Error(`Failed to fetch: ${response.statusText}`);
+	}
+
+	return response.json();
+};
+
 const formatNumber = (num: number | string | undefined | null): string => {
 	if (num === undefined || num === null) {
 		return "0";
@@ -76,38 +110,37 @@ type Chain = {
 defillama.get("/protocols", async (c) => {
 	const { search } = c.req.query();
 
-	const response = await fetch("https://api.llama.fi/protocols");
+	try {
+		// Cache for 5 minutes
+		const data = (await fetchWithCache("https://api.llama.fi/protocols", 300)) as Protocol[];
 
-	if (!response.ok) {
+		// Filter by search term if provided
+		const filteredData = search
+			? data.filter((protocol) =>
+				protocol.name.toLowerCase().includes(search.toLowerCase()) ||
+				protocol.symbol?.toLowerCase().includes(search.toLowerCase()) ||
+				protocol.category.toLowerCase().includes(search.toLowerCase())
+			)
+			: data;
+
+		return c.json(
+			filteredData.map((protocol) => ({
+				id: protocol.id,
+				name: protocol.name,
+				symbol: protocol.symbol || "",
+				category: protocol.category,
+				chains: protocol.chains.join(", "),
+				tvl: protocol.tvl,
+				change_1d: protocol.change_1d || 0,
+				change_7d: protocol.change_7d || 0,
+				change_1m: protocol.change_1m || 0,
+				mcap: protocol.mcap || 0,
+				slug: protocol.slug,
+			}))
+		);
+	} catch (error) {
 		return c.json({ error: "Failed to fetch protocols" }, 500);
 	}
-
-	const data = (await response.json()) as Protocol[];
-
-	// Filter by search term if provided
-	const filteredData = search
-		? data.filter((protocol) =>
-			protocol.name.toLowerCase().includes(search.toLowerCase()) ||
-			protocol.symbol?.toLowerCase().includes(search.toLowerCase()) ||
-			protocol.category.toLowerCase().includes(search.toLowerCase())
-		)
-		: data;
-
-	return c.json(
-		filteredData.map((protocol) => ({
-			id: protocol.id,
-			name: protocol.name,
-			symbol: protocol.symbol || "",
-			category: protocol.category,
-			chains: protocol.chains.join(", "),
-			tvl: protocol.tvl,
-			change_1d: protocol.change_1d || 0,
-			change_7d: protocol.change_7d || 0,
-			change_1m: protocol.change_1m || 0,
-			mcap: protocol.mcap || 0,
-			slug: protocol.slug,
-		}))
-	);
 });
 
 // Get protocol details with historical TVL
@@ -164,30 +197,29 @@ defillama.get("/protocol/:slug/tvl", async (c) => {
 defillama.get("/chains", async (c) => {
 	const { search } = c.req.query();
 
-	const response = await fetch("https://api.llama.fi/v2/chains");
+	try {
+		// Cache for 10 minutes - chains don't change often
+		const data = (await fetchWithCache("https://api.llama.fi/v2/chains", 600)) as Chain[];
 
-	if (!response.ok) {
+		// Filter by search term if provided
+		const filteredData = search
+			? data.filter((chain) =>
+				chain.name.toLowerCase().includes(search.toLowerCase()) ||
+				chain.tokenSymbol?.toLowerCase().includes(search.toLowerCase())
+			)
+			: data;
+
+		return c.json(
+			filteredData.map((chain) => ({
+				name: chain.name,
+				tvl: chain.tvl,
+				tokenSymbol: chain.tokenSymbol || "",
+				chainId: chain.chainId || "",
+			}))
+		);
+	} catch (error) {
 		return c.json({ error: "Failed to fetch chains" }, 500);
 	}
-
-	const data = (await response.json()) as Chain[];
-
-	// Filter by search term if provided
-	const filteredData = search
-		? data.filter((chain) =>
-			chain.name.toLowerCase().includes(search.toLowerCase()) ||
-			chain.tokenSymbol?.toLowerCase().includes(search.toLowerCase())
-		)
-		: data;
-
-	return c.json(
-		filteredData.map((chain) => ({
-			name: chain.name,
-			tvl: chain.tvl,
-			tokenSymbol: chain.tokenSymbol || "",
-			chainId: chain.chainId || "",
-		}))
-	);
 });
 
 // Get historical TVL for a specific chain
@@ -840,152 +872,146 @@ defillama.get("/options/summary/:protocol", async (c) => {
 
 // Get open interest overview and statistics
 defillama.get("/open-interest", async (c) => {
-	const response = await fetch("https://api.llama.fi/overview/open-interest");
-
-	if (!response.ok) {
+	try {
+		// Cache for 5 minutes
+		const data = await fetchWithCache("https://api.llama.fi/overview/open-interest", 300);
+		return c.json(data);
+	} catch (error) {
 		return c.json({ error: "Failed to fetch open interest data" }, 500);
 	}
-
-	const data = (await response.json()) as any;
-
-	return c.json(data);
 });
 
 // Get open interest protocols table
 defillama.get("/open-interest/protocols", async (c) => {
 	const { search } = c.req.query();
 
-	const response = await fetch("https://api.llama.fi/overview/open-interest");
+	try {
+		// Cache for 5 minutes
+		const data = await fetchWithCache("https://api.llama.fi/overview/open-interest", 300);
 
-	if (!response.ok) {
+		const filteredProtocols = search
+			? data.protocols.filter((protocol: any) =>
+				protocol.name.toLowerCase().includes(search.toLowerCase()) ||
+				protocol.displayName?.toLowerCase().includes(search.toLowerCase())
+			)
+			: data.protocols;
+
+		return c.json(
+			filteredProtocols.map((protocol: any) => ({
+				name: protocol.name,
+				displayName: protocol.displayName,
+				total24h: protocol.total24h || 0,
+				total7d: protocol.total7d || 0,
+				change_1d: protocol.change_1d || 0,
+				change_7d: protocol.change_7d || 0,
+				chains: protocol.chains?.join(", ") || "",
+			}))
+		);
+	} catch (error) {
 		return c.json({ error: "Failed to fetch open interest protocols" }, 500);
 	}
-
-	const data = (await response.json()) as any;
-
-	const filteredProtocols = search
-		? data.protocols.filter((protocol: any) =>
-			protocol.name.toLowerCase().includes(search.toLowerCase()) ||
-			protocol.displayName?.toLowerCase().includes(search.toLowerCase())
-		)
-		: data.protocols;
-
-	return c.json(
-		filteredProtocols.map((protocol: any) => ({
-			name: protocol.name,
-			displayName: protocol.displayName,
-			total24h: protocol.total24h || 0,
-			total7d: protocol.total7d || 0,
-			change_1d: protocol.change_1d || 0,
-			change_7d: protocol.change_7d || 0,
-			chains: protocol.chains?.join(", ") || "",
-		}))
-	);
 });
 
 // Get open interest total data chart
 defillama.get("/open-interest/chart/total", async (c) => {
-	const response = await fetch("https://api.llama.fi/overview/open-interest");
+	try {
+		// Cache for 10 minutes - historical data
+		const data = await fetchWithCache("https://api.llama.fi/overview/open-interest", 600);
 
-	if (!response.ok) {
+		return c.json(
+			data.totalDataChart?.map((point: any) => ({
+				date: new Date(point[0] * 1000).toISOString().split("T")[0],
+				value: point[1],
+			})) || []
+		);
+	} catch (error) {
 		return c.json({ error: "Failed to fetch open interest chart data" }, 500);
 	}
-
-	const data = (await response.json()) as any;
-
-	return c.json(
-		data.totalDataChart?.map((point: any) => ({
-			date: new Date(point[0] * 1000).toISOString().split("T")[0],
-			value: point[1],
-		})) || []
-	);
 });
 
 // Get open interest breakdown chart data
 defillama.get("/open-interest/chart/breakdown", async (c) => {
-	const response = await fetch("https://api.llama.fi/overview/open-interest");
+	try {
+		// Cache for 10 minutes - historical data
+		const data = await fetchWithCache("https://api.llama.fi/overview/open-interest", 600);
 
-	if (!response.ok) {
+		if (!data.totalDataChartBreakdown || data.totalDataChartBreakdown.length === 0) {
+			return c.json([]);
+		}
+
+		// Collect all unique protocol names across all timestamps
+		const allProtocols = new Set<string>();
+		for (const point of data.totalDataChartBreakdown) {
+			if (point[1]) {
+				Object.keys(point[1]).forEach((protocol) => allProtocols.add(protocol));
+			}
+		}
+
+		// Normalize data: fill missing protocols with 0
+		return c.json(
+			data.totalDataChartBreakdown.map((point: any) => {
+				const normalized: Record<string, number> = {
+					date: new Date(point[0] * 1000).toISOString().split("T")[0],
+				};
+
+				// Initialize all protocols with 0
+				allProtocols.forEach((protocol) => {
+					normalized[protocol] = 0;
+				});
+
+				// Fill in actual values
+				if (point[1]) {
+					Object.entries(point[1]).forEach(([protocol, value]) => {
+						normalized[protocol] = value as number;
+					});
+				}
+
+				return normalized;
+			})
+		);
+	} catch (error) {
 		return c.json({ error: "Failed to fetch open interest breakdown" }, 500);
 	}
-
-	const data = (await response.json()) as any;
-
-	if (!data.totalDataChartBreakdown || data.totalDataChartBreakdown.length === 0) {
-		return c.json([]);
-	}
-
-	// Collect all unique protocol names across all timestamps
-	const allProtocols = new Set<string>();
-	for (const point of data.totalDataChartBreakdown) {
-		if (point[1]) {
-			Object.keys(point[1]).forEach((protocol) => allProtocols.add(protocol));
-		}
-	}
-
-	// Normalize data: fill missing protocols with 0
-	return c.json(
-		data.totalDataChartBreakdown.map((point: any) => {
-			const normalized: Record<string, number> = {
-				date: new Date(point[0] * 1000).toISOString().split("T")[0],
-			};
-
-			// Initialize all protocols with 0
-			allProtocols.forEach((protocol) => {
-				normalized[protocol] = 0;
-			});
-
-			// Fill in actual values
-			if (point[1]) {
-				Object.entries(point[1]).forEach(([protocol, value]) => {
-					normalized[protocol] = value as number;
-				});
-			}
-
-			return normalized;
-		})
-	);
 });
 
 // Get open interest stats
 defillama.get("/open-interest/stats", async (c) => {
-	const response = await fetch("https://api.llama.fi/overview/open-interest");
+	try {
+		// Cache for 5 minutes
+		const data = await fetchWithCache("https://api.llama.fi/overview/open-interest", 300);
 
-	if (!response.ok) {
+		const latestTotal = data.totalDataChart?.[data.totalDataChart.length - 1]?.[1] || 0;
+		const previousTotal = data.totalDataChart?.[data.totalDataChart.length - 2]?.[1] || 0;
+		const weekAgoTotal = data.totalDataChart?.[data.totalDataChart.length - 8]?.[1] || 0;
+
+		const change24h = previousTotal ? ((latestTotal - previousTotal) / previousTotal) * 100 : 0;
+		const change7d = weekAgoTotal ? ((latestTotal - weekAgoTotal) / weekAgoTotal) * 100 : 0;
+
+		return c.json([
+			{
+				metric: "Total Open Interest",
+				value: latestTotal,
+			},
+			{
+				metric: "24h Change",
+				value: change24h,
+			},
+			{
+				metric: "7d Change",
+				value: change7d,
+			},
+			{
+				metric: "Total Protocols",
+				value: data.protocols?.length || 0,
+			},
+			{
+				metric: "Total Chains",
+				value: data.allChains?.length || 0,
+			},
+		]);
+	} catch (error) {
 		return c.json({ error: "Failed to fetch open interest stats" }, 500);
 	}
-
-	const data = (await response.json()) as any;
-
-	const latestTotal = data.totalDataChart?.[data.totalDataChart.length - 1]?.[1] || 0;
-	const previousTotal = data.totalDataChart?.[data.totalDataChart.length - 2]?.[1] || 0;
-	const weekAgoTotal = data.totalDataChart?.[data.totalDataChart.length - 8]?.[1] || 0;
-
-	const change24h = previousTotal ? ((latestTotal - previousTotal) / previousTotal) * 100 : 0;
-	const change7d = weekAgoTotal ? ((latestTotal - weekAgoTotal) / weekAgoTotal) * 100 : 0;
-
-	return c.json([
-		{
-			metric: "Total Open Interest",
-			value: latestTotal,
-		},
-		{
-			metric: "24h Change",
-			value: change24h,
-		},
-		{
-			metric: "7d Change",
-			value: change7d,
-		},
-		{
-			metric: "Total Protocols",
-			value: data.protocols?.length || 0,
-		},
-		{
-			metric: "Total Chains",
-			value: data.allChains?.length || 0,
-		},
-	]);
 });
 
 // ============================================

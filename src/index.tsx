@@ -25,7 +25,7 @@ app.get("/", (c) => {
 				{html`
           <script>
 					function copyUrl() {
-						const url = 'https://openbb-defillama.YOUR-DOMAIN.workers.dev';
+						const url = 'https://openbb-defillama.jose-donato.workers.dev/';
 						navigator.clipboard.writeText(url).then(() => {
 							const copyIcon = document.getElementById('copyIcon');
 							const checkIcon = document.getElementById('checkIcon');
@@ -74,7 +74,7 @@ app.get("/", (c) => {
 										<li>
 											<strong>URL</strong>:
 											<span class="inline-flex items-center gap-2">
-												<code class="ml-1 bg-gray-700 text-gray-200 px-1 py-0.5 rounded">https://</code>
+												<code class="ml-1 bg-gray-700 text-gray-200 px-1 py-0.5 rounded">https://openbb-defillama.jose-donato.workers.dev/</code>
 												<button
 													id="copyUrlBtn"
 													class="text-gray-400 hover:text-white transition-colors duration-200"

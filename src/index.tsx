@@ -396,45 +396,6 @@ app.get("/apps.json", (c) => {
 								"chartType": "line"
 							}
 						}
-					},
-					{
-						"i": "hacks_list",
-						"x": 0,
-						"y": 15,
-						"w": 20,
-						"h": 18,
-						"state": {
-							"chartView": {
-								"enabled": false,
-								"chartType": "line"
-							}
-						}
-					},
-					{
-						"i": "raises_list",
-						"x": 20,
-						"y": 15,
-						"w": 20,
-						"h": 18,
-						"state": {
-							"chartView": {
-								"enabled": false,
-								"chartType": "line"
-							}
-						}
-					},
-					{
-						"i": "treasuries_list",
-						"x": 0,
-						"y": 33,
-						"w": 40,
-						"h": 15,
-						"state": {
-							"chartView": {
-								"enabled": false,
-								"chartType": "line"
-							}
-						}
 					}
 				]
 			},
@@ -817,33 +778,6 @@ app.get("/widgets.json", (c) => {
 					value: "1",
 				},
 			],
-		},
-
-		// Security & Hacks Widgets
-		hacks_list: {
-			name: "DeFi Hacks & Exploits",
-			description: "List all security incidents and hacks in DeFi",
-			source: "DefiLlama",
-			endpoint: "/defillama/hacks",
-			params: [],
-		},
-
-		// Raises/Funding Widgets
-		raises_list: {
-			name: "Protocol Fundraising",
-			description: "List all protocol funding rounds and raises",
-			source: "DefiLlama",
-			endpoint: "/defillama/raises",
-			params: [],
-		},
-
-		// Treasuries Widgets
-		treasuries_list: {
-			name: "Protocol Treasuries",
-			description: "List all protocol treasury holdings",
-			source: "DefiLlama",
-			endpoint: "/defillama/treasuries",
-			params: [],
 		},
 
 		// Options/Derivatives Widgets

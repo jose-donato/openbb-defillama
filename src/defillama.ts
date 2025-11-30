@@ -154,7 +154,6 @@ defillama.get("/protocol/:slug/tvl", async (c) => {
 	// Transform TVL array into time series
 	const tvlData = protocol.tvl?.map((point: any) => ({
 		date: formatDate(point.date),
-		timestamp: point.date,
 		totalLiquidityUSD: point.totalLiquidityUSD,
 	})) || [];
 
@@ -206,7 +205,6 @@ defillama.get("/chain/:chain", async (c) => {
 	return c.json(
 		data.map((point) => ({
 			date: formatDate(point.date),
-			timestamp: point.date,
 			tvl: point.tvl,
 		}))
 	);
@@ -317,7 +315,6 @@ defillama.get("/stablecoin/:asset", async (c) => {
 	return c.json(
 		data.chainBalances?.map((point: any) => ({
 			date: formatDate(point.date),
-			timestamp: point.date,
 			totalCirculating: point.totalCirculating?.peggedUSD || 0,
 			...point.tokens,
 		})) || []
@@ -356,7 +353,6 @@ defillama.get("/stablecoins/charts/all", async (c) => {
 	return c.json(
 		data.map((point) => ({
 			date: point.date,
-			timestamp: new Date(point.date).getTime() / 1000,
 			totalCirculatingUSD: point.totalCirculatingUSD?.peggedUSD || 0,
 		}))
 	);
@@ -423,7 +419,6 @@ defillama.get("/yields/chart/:pool", async (c) => {
 	return c.json({
 		status: data.status,
 		data: data.data.map((point: any) => ({
-			timestamp: point.timestamp,
 			date: new Date(point.timestamp).toISOString(),
 			tvlUsd: point.tvlUsd || 0,
 			apy: point.apy || 0,
@@ -523,7 +518,6 @@ defillama.get("/dexs/summary/:protocol", async (c) => {
 		totalAllTime: data.totalAllTime,
 		totalDataChart: data.totalDataChart?.map((point: any) => ({
 			date: new Date(point[0] * 1000).toISOString(),
-			timestamp: point[0],
 			volume: point[1],
 		})) || [],
 		totalDataChartBreakdown: data.totalDataChartBreakdown || [],
@@ -615,7 +609,6 @@ defillama.get("/fees/summary/:protocol", async (c) => {
 		totalAllTime: data.totalAllTime,
 		totalDataChart: data.totalDataChart?.map((point: any) => ({
 			date: new Date(point[0] * 1000).toISOString(),
-			timestamp: point[0],
 			fees: point[1],
 		})) || [],
 		totalDataChartBreakdown: data.totalDataChartBreakdown || [],
@@ -836,7 +829,6 @@ defillama.get("/options/summary/:protocol", async (c) => {
 		totalAllTime: data.totalAllTime,
 		totalDataChart: data.totalDataChart?.map((point: any) => ({
 			date: new Date(point[0] * 1000).toISOString(),
-			timestamp: point[0],
 			volume: point[1],
 		})) || [],
 	});
@@ -904,7 +896,6 @@ defillama.get("/open-interest/chart/total", async (c) => {
 	return c.json(
 		data.totalDataChart?.map((point: any) => ({
 			date: new Date(point[0] * 1000).toISOString().split("T")[0],
-			timestamp: point[0],
 			value: point[1],
 		})) || []
 	);
@@ -924,12 +915,35 @@ defillama.get("/open-interest/chart/breakdown", async (c) => {
 		return c.json([]);
 	}
 
+	// Collect all unique protocol names across all timestamps
+	const allProtocols = new Set<string>();
+	for (const point of data.totalDataChartBreakdown) {
+		if (point[1]) {
+			Object.keys(point[1]).forEach((protocol) => allProtocols.add(protocol));
+		}
+	}
+
+	// Normalize data: fill missing protocols with 0
 	return c.json(
-		data.totalDataChartBreakdown.map((point: any) => ({
-			date: new Date(point[0] * 1000).toISOString().split("T")[0],
-			timestamp: point[0],
-			...point[1],
-		}))
+		data.totalDataChartBreakdown.map((point: any) => {
+			const normalized: Record<string, number> = {
+				date: new Date(point[0] * 1000).toISOString().split("T")[0],
+			};
+
+			// Initialize all protocols with 0
+			allProtocols.forEach((protocol) => {
+				normalized[protocol] = 0;
+			});
+
+			// Fill in actual values
+			if (point[1]) {
+				Object.entries(point[1]).forEach(([protocol, value]) => {
+					normalized[protocol] = value as number;
+				});
+			}
+
+			return normalized;
+		})
 	);
 });
 

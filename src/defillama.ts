@@ -225,34 +225,14 @@ defillama.get("/charts/chains", async (c) => {
 	// Sort by TVL descending
 	const sortedChains = data.sort((a, b) => b.tvl - a.tvl).slice(0, 20);
 
-	const plotlyData = {
-		data: [
-			{
-				x: sortedChains.map((chain) => chain.name),
-				y: sortedChains.map((chain) => chain.tvl),
-				type: "bar",
-				marker: {
-					color: "#00D4FF",
-				},
-			},
-		],
-		layout: {
-			title: "TVL by Chain",
-			xaxis: {
-				title: "Chain",
-			},
-			yaxis: {
-				title: "TVL (USD)",
-			},
-			plot_bgcolor: "#151518",
-			paper_bgcolor: "#151518",
-			font: {
-				color: "#FFFFFF",
-			},
-		},
-	};
-
-	return c.json(plotlyData);
+	return c.json(
+		sortedChains.map((chain) => ({
+			name: chain.name,
+			value: chain.tvl,
+			tokenSymbol: chain.tokenSymbol || "",
+			chainId: chain.chainId || "",
+		}))
+	);
 });
 
 // Get historical TVL chart for a protocol
@@ -267,39 +247,12 @@ defillama.get("/charts/protocol/:slug", async (c) => {
 
 	const protocol = (await response.json()) as any;
 
-	const plotlyData = {
-		data: [
-			{
-				x: protocol.tvl?.map((point: any) => new Date(point.date * 1000).toISOString()) || [],
-				y: protocol.tvl?.map((point: any) => point.totalLiquidityUSD) || [],
-				type: "scatter",
-				mode: "lines",
-				name: protocol.name,
-				line: {
-					color: "#00D4FF",
-					width: 2,
-				},
-			},
-		],
-		layout: {
-			title: `${protocol.name} TVL History`,
-			xaxis: {
-				title: "Date",
-				type: "date",
-			},
-			yaxis: {
-				title: "TVL (USD)",
-			},
-			plot_bgcolor: "#151518",
-			paper_bgcolor: "#151518",
-			font: {
-				color: "#FFFFFF",
-			},
-			hovermode: "x unified",
-		},
-	};
-
-	return c.json(plotlyData);
+	return c.json(
+		protocol.tvl?.map((point: any) => ({
+			date: new Date(point.date * 1000).toISOString().split("T")[0],
+			value: point.totalLiquidityUSD,
+		})) || []
+	);
 });
 
 // ============================================
@@ -710,39 +663,12 @@ defillama.get("/charts/stablecoins", async (c) => {
 
 	const data = (await response.json()) as any[];
 
-	const plotlyData = {
-		data: [
-			{
-				x: data.map((point) => point.date),
-				y: data.map((point) => point.totalCirculatingUSD?.peggedUSD || 0),
-				type: "scatter",
-				mode: "lines",
-				name: "Total Stablecoin Market Cap",
-				line: {
-					color: "#00D4FF",
-					width: 2,
-				},
-			},
-		],
-		layout: {
-			title: "Stablecoin Market Cap Over Time",
-			xaxis: {
-				title: "Date",
-				type: "date",
-			},
-			yaxis: {
-				title: "Market Cap (USD)",
-			},
-			plot_bgcolor: "#151518",
-			paper_bgcolor: "#151518",
-			font: {
-				color: "#FFFFFF",
-			},
-			hovermode: "x unified",
-		},
-	};
-
-	return c.json(plotlyData);
+	return c.json(
+		data.map((point) => ({
+			date: point.date,
+			value: point.totalCirculatingUSD?.peggedUSD || 0,
+		}))
+	);
 });
 
 // DEX volume chart for a specific protocol
@@ -757,39 +683,12 @@ defillama.get("/charts/dex/:protocol", async (c) => {
 
 	const data = (await response.json()) as any;
 
-	const plotlyData = {
-		data: [
-			{
-				x: data.totalDataChart?.map((point: any) => new Date(point[0] * 1000).toISOString()) || [],
-				y: data.totalDataChart?.map((point: any) => point[1]) || [],
-				type: "scatter",
-				mode: "lines",
-				name: data.displayName || data.name,
-				line: {
-					color: "#00D4FF",
-					width: 2,
-				},
-			},
-		],
-		layout: {
-			title: `${data.displayName || data.name} Volume History`,
-			xaxis: {
-				title: "Date",
-				type: "date",
-			},
-			yaxis: {
-				title: "Volume (USD)",
-			},
-			plot_bgcolor: "#151518",
-			paper_bgcolor: "#151518",
-			font: {
-				color: "#FFFFFF",
-			},
-			hovermode: "x unified",
-		},
-	};
-
-	return c.json(plotlyData);
+	return c.json(
+		data.totalDataChart?.map((point: any) => ({
+			date: new Date(point[0] * 1000).toISOString().split("T")[0],
+			value: point[1],
+		})) || []
+	);
 });
 
 // Fees chart for a specific protocol
@@ -804,39 +703,12 @@ defillama.get("/charts/fees/:protocol", async (c) => {
 
 	const data = (await response.json()) as any;
 
-	const plotlyData = {
-		data: [
-			{
-				x: data.totalDataChart?.map((point: any) => new Date(point[0] * 1000).toISOString()) || [],
-				y: data.totalDataChart?.map((point: any) => point[1]) || [],
-				type: "scatter",
-				mode: "lines",
-				name: data.displayName || data.name,
-				line: {
-					color: "#00D4FF",
-					width: 2,
-				},
-			},
-		],
-		layout: {
-			title: `${data.displayName || data.name} Fees History`,
-			xaxis: {
-				title: "Date",
-				type: "date",
-			},
-			yaxis: {
-				title: "Fees (USD)",
-			},
-			plot_bgcolor: "#151518",
-			paper_bgcolor: "#151518",
-			font: {
-				color: "#FFFFFF",
-			},
-			hovermode: "x unified",
-		},
-	};
-
-	return c.json(plotlyData);
+	return c.json(
+		data.totalDataChart?.map((point: any) => ({
+			date: new Date(point[0] * 1000).toISOString().split("T")[0],
+			value: point[1],
+		})) || []
+	);
 });
 
 // ============================================
@@ -1071,39 +943,12 @@ defillama.get("/charts/global-tvl", async (c) => {
 
 	const data = (await response.json()) as Array<{ date: number; tvl: number }>;
 
-	const plotlyData = {
-		data: [
-			{
-				x: data.map((point) => new Date(point.date * 1000).toISOString()),
-				y: data.map((point) => point.tvl),
-				type: "scatter",
-				mode: "lines",
-				name: "Global DeFi TVL",
-				line: {
-					color: "#00D4FF",
-					width: 2,
-				},
-			},
-		],
-		layout: {
-			title: "Global DeFi TVL Over Time",
-			xaxis: {
-				title: "Date",
-				type: "date",
-			},
-			yaxis: {
-				title: "TVL (USD)",
-			},
-			plot_bgcolor: "#151518",
-			paper_bgcolor: "#151518",
-			font: {
-				color: "#FFFFFF",
-			},
-			hovermode: "x unified",
-		},
-	};
-
-	return c.json(plotlyData);
+	return c.json(
+		data.map((point) => ({
+			date: new Date(point.date * 1000).toISOString().split("T")[0],
+			value: point.tvl,
+		}))
+	);
 });
 
 // Get current token prices

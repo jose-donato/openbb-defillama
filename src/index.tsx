@@ -233,7 +233,7 @@ app.get("/apps.json", (c) => {
 						"h": 15,
 						"state": {
 							"chartView": {
-								"enabled": true,
+								"enabled": false,
 								"chartType": "bar"
 							}
 						}
@@ -265,7 +265,7 @@ app.get("/apps.json", (c) => {
 						"h": 14,
 						"state": {
 							"chartView": {
-								"enabled": true,
+								"enabled": false,
 								"chartType": "line"
 							}
 						}
@@ -392,7 +392,7 @@ app.get("/apps.json", (c) => {
 						"h": 15,
 						"state": {
 							"chartView": {
-								"enabled": true,
+								"enabled": false,
 								"chartType": "line"
 							}
 						}
@@ -534,19 +534,17 @@ app.get("/widgets.json", (c) => {
 			params: [],
 		},
 		chains_chart: {
-			name: "Chains TVL Chart",
-			description: "Bar chart showing TVL by chain",
+			name: "Chains TVL Data",
+			description: "Data showing TVL by chain",
 			source: "DefiLlama",
 			endpoint: "/defillama/charts/chains",
-			type: "chart",
 			params: [],
 		},
 		protocol_tvl: {
 			name: "Protocol TVL History",
-			description: "Historical TVL chart for a specific protocol",
+			description: "Historical TVL data for a specific protocol",
 			source: "DefiLlama",
 			endpoint: "/defillama/charts/protocol/:slug",
-			type: "chart",
 			params: [
 				{
 					paramName: "slug",
@@ -608,11 +606,10 @@ app.get("/widgets.json", (c) => {
 			params: [],
 		},
 		stablecoins_chart: {
-			name: "Stablecoins Market Cap Chart",
-			description: "Historical market cap of all stablecoins",
+			name: "Stablecoins Market Cap Data",
+			description: "Historical market cap data of all stablecoins",
 			source: "DefiLlama",
 			endpoint: "/defillama/charts/stablecoins",
-			type: "chart",
 			params: [],
 		},
 
@@ -676,11 +673,10 @@ app.get("/widgets.json", (c) => {
 			],
 		},
 		dex_chart: {
-			name: "DEX Volume Chart",
-			description: "Historical volume chart for a DEX",
+			name: "DEX Volume History",
+			description: "Historical volume data for a DEX",
 			source: "DefiLlama",
 			endpoint: "/defillama/charts/dex/:protocol",
-			type: "chart",
 			params: [
 				{
 					paramName: "protocol",
@@ -728,11 +724,10 @@ app.get("/widgets.json", (c) => {
 			],
 		},
 		fees_chart: {
-			name: "Protocol Fees Chart",
-			description: "Historical fees chart for a protocol",
+			name: "Protocol Fees History",
+			description: "Historical fees data for a protocol",
 			source: "DefiLlama",
 			endpoint: "/defillama/charts/fees/:protocol",
-			type: "chart",
 			params: [
 				{
 					paramName: "protocol",
@@ -832,11 +827,10 @@ app.get("/widgets.json", (c) => {
 
 		// Global Charts
 		global_tvl_chart: {
-			name: "Global DeFi TVL Chart",
-			description: "Historical chart of total DeFi TVL across all chains",
+			name: "Global DeFi TVL Data",
+			description: "Historical data of total DeFi TVL across all chains",
 			source: "DefiLlama",
 			endpoint: "/defillama/charts/global-tvl",
-			type: "chart",
 			params: [],
 		},
 

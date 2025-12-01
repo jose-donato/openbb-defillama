@@ -238,23 +238,9 @@ app.get("/apps.json", (c) => {
 						"groups": []
 					},
 					{
-						"i": "chains_list",
-						"x": 0,
-						"y": 37,
-						"w": 40,
-						"h": 12,
-						"state": {
-							"chartView": {
-								"enabled": false,
-								"chartType": "line"
-							}
-						},
-						"groups": []
-					},
-					{
 						"i": "chains_chart",
 						"x": 0,
-						"y": 49,
+						"y": 37,
 						"w": 40,
 						"h": 15,
 						"state": {
@@ -482,7 +468,7 @@ app.get("/apps.json", (c) => {
 								"suppressChartRanges": true
 							},
 							"chartView": {
-								"enabled": false,
+								"enabled": true,
 								"chartType": "line"
 							}
 						},

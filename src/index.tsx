@@ -60,6 +60,8 @@ app.get("/", (c) => {
 
 						<p class="text-sm text-gray-300 text-center mb-6">DeFi TVL and analytics dashboard</p>
 
+						<p class="text-sm text-gray-300 text-center mb-6">Created by <a href="https://x.com/josedonato__" class="text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer">@josedonato__</a></p>
+
 						<div class="bg-gray-800 rounded-lg p-6 w-full max-w-2xl">
 							<h2 class="text-lg font-semibold text-white mb-4">How to Add to OpenBB Workspace</h2>
 							<ol class="list-decimal list-inside space-y-2 text-sm text-gray-300">
@@ -118,9 +120,9 @@ app.get("/", (c) => {
 app.get("/apps.json", (c) => {
 	return c.json([{
 		"name": "DefiLlama",
-		"img": "https://cdn.prod.website-files.com/67ed326db9d26b1dc1df7929/68017c18f1ea2ec0700cca5e_653ef3f92944e7d505ca0e91_DefiLlama%2520Logo.webp",
-		"img_dark": "https://cdn.prod.website-files.com/67ed326db9d26b1dc1df7929/68017c18f1ea2ec0700cca5e_653ef3f92944e7d505ca0e91_DefiLlama%2520Logo.webp",
-		"img_light": "https://cdn.prod.website-files.com/67ed326db9d26b1dc1df7929/68017c18f1ea2ec0700cca5e_653ef3f92944e7d505ca0e91_DefiLlama%2520Logo.webp",
+		"img": "https://blockzeit.com/wp-content/uploads/2023/05/DeFiLlama.png",
+		"img_dark": "https://blockzeit.com/wp-content/uploads/2023/05/DeFiLlama.png",
+		"img_light": "https://blockzeit.com/wp-content/uploads/2023/05/DeFiLlama.png",
 		"description": "Comprehensive DeFi analytics platform powered by DefiLlama API. Search and analyze protocols, chains, stablecoins, DEXs, and yield pools. Track TVL, volumes, fees, bridges, options, security incidents, fundraising, and more across the entire DeFi ecosystem.",
 		"allowCustomization": true,
 		"tabs": {

@@ -572,20 +572,15 @@ defillama.get("/fees", async (c) => {
 
 	return c.json(
 		data.protocols.map((protocol: any) => ({
-			defillamaId: protocol.defillamaId,
-			name: protocol.name,
 			displayName: protocol.displayName,
-			module: protocol.module,
 			category: protocol.category,
-			logo: protocol.logo,
+			definition: protocol.methodology?.Revenue ?? "",
 			chains: protocol.chains || [],
-			total24h: protocol.total24h || 0,
-			total7d: protocol.total7d || 0,
-			total30d: protocol.total30d || 0,
-			totalAllTime: protocol.totalAllTime || 0,
-			revenue24h: protocol.revenue24h || 0,
-			revenue7d: protocol.revenue7d || 0,
-			revenue30d: protocol.revenue30d || 0,
+			revenue24h: protocol.total24h || 0,
+			revenue7d: protocol.total7d || 0,
+			revenue30d: protocol.total30d || 0,
+			revenueAllTime: protocol.totalAllTime || 0,
+			monthlyAverage: protocol.monthlyAverage1y || 0,
 			change_1d: protocol.change_1d || 0,
 			change_7d: protocol.change_7d || 0,
 			change_1m: protocol.change_1m || 0,
@@ -690,7 +685,7 @@ defillama.get("/charts/stablecoins", async (c) => {
 
 	return c.json(
 		data.map((point) => ({
-			date: point.date,
+			date: new Date(point.date * 1000).toISOString().split("T")[0],
 			value: point.totalCirculatingUSD?.peggedUSD || 0,
 		}))
 	);

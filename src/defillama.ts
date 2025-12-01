@@ -125,9 +125,7 @@ defillama.get("/protocols", async (c) => {
 
 		return c.json(
 			filteredData.map((protocol) => ({
-				id: protocol.id,
 				name: protocol.name,
-				symbol: protocol.symbol || "",
 				category: protocol.category,
 				chains: protocol.chains.join(", "),
 				tvl: protocol.tvl,
@@ -156,13 +154,10 @@ defillama.get("/protocol/:slug", async (c) => {
 	}
 
 	return c.json({
-		id: protocol.id,
 		name: protocol.name,
-		symbol: protocol.symbol || "",
 		category: protocol.category,
 		chains: protocol.chains,
 		description: protocol.description || "",
-		logo: protocol.logo || "",
 		url: protocol.url || "",
 		twitter: protocol.twitter || "",
 		tvl: protocol.tvl,
@@ -213,8 +208,6 @@ defillama.get("/chains", async (c) => {
 			filteredData.map((chain) => ({
 				name: chain.name,
 				tvl: chain.tvl,
-				tokenSymbol: chain.tokenSymbol || "",
-				chainId: chain.chainId || "",
 			}))
 		);
 	} catch (error) {
@@ -255,8 +248,6 @@ defillama.get("/charts/chains", async (c) => {
 			sortedChains.map((chain) => ({
 				name: chain.name,
 				value: chain.tvl,
-				tokenSymbol: chain.tokenSymbol || "",
-				chainId: chain.chainId || "",
 			}))
 		);
 	} catch (error) {
@@ -306,9 +297,7 @@ defillama.get("/stablecoins", async (c) => {
 
 		return c.json(
 			filteredAssets.map((stablecoin: any) => ({
-				id: stablecoin.id,
 				name: stablecoin.name,
-				symbol: stablecoin.symbol,
 				circulating: stablecoin.circulating?.peggedUSD || 0,
 				price: stablecoin.price || 1,
 				chains: stablecoin.chainCirculating
@@ -358,7 +347,6 @@ defillama.get("/stablecoins/chains", async (c) => {
 
 		return c.json(
 			data.map((chain: any) => ({
-				gecko_id: chain.gecko_id,
 				totalCirculatingUSD: chain.totalCirculatingUSD?.peggedUSD || 0,
 				name: chain.name,
 			}))
@@ -475,12 +463,9 @@ defillama.get("/dexs", async (c) => {
 
 		return c.json(
 			filteredProtocols.map((dex: any) => ({
-				defillamaId: dex.defillamaId,
-				name: dex.name,
-				displayName: dex.displayName,
+				name: dex.displayName,
 				module: dex.module,
 				category: dex.category,
-				logo: dex.logo,
 				chains: dex.chains || [],
 				total24h: dex.total24h || 0,
 				total7d: dex.total7d || 0,
@@ -506,9 +491,7 @@ defillama.get("/dexs/:chain", async (c) => {
 
 		return c.json(
 			data.protocols.map((dex: any) => ({
-				defillamaId: dex.defillamaId,
-				name: dex.name,
-				displayName: dex.displayName,
+				name: dex.displayName,
 				total24h: dex.total24h || 0,
 				total7d: dex.total7d || 0,
 				change_1d: dex.change_1d || 0,
@@ -529,8 +512,7 @@ defillama.get("/dexs/summary/:protocol", async (c) => {
 		const data = await fetchWithCache(`https://api.llama.fi/summary/dexs/${protocol}`, 3600);
 
 		return c.json({
-			name: data.name,
-			displayName: data.displayName,
+			name: data.displayName,
 			total24h: data.total24h,
 			total7d: data.total7d,
 			total30d: data.total30d,
@@ -558,7 +540,7 @@ defillama.get("/fees", async (c) => {
 
 		return c.json(
 			data.protocols.map((protocol: any) => ({
-				displayName: protocol.displayName,
+				name: protocol.displayName,
 				category: protocol.category,
 				definition: protocol.methodology?.Revenue ?? "",
 				chains: protocol.chains || [],
@@ -587,9 +569,7 @@ defillama.get("/fees/:chain", async (c) => {
 
 		return c.json(
 			data.protocols.map((protocol: any) => ({
-				defillamaId: protocol.defillamaId,
-				name: protocol.name,
-				displayName: protocol.displayName,
+				name: protocol.displayName,
 				total24h: protocol.total24h || 0,
 				total7d: protocol.total7d || 0,
 				revenue24h: protocol.revenue24h || 0,
@@ -612,8 +592,7 @@ defillama.get("/fees/summary/:protocol", async (c) => {
 		const data = await fetchWithCache(`https://api.llama.fi/summary/fees/${protocol}`, 3600);
 
 		return c.json({
-			name: data.name,
-			displayName: data.displayName,
+			name: data.displayName,
 			total24h: data.total24h,
 			total7d: data.total7d,
 			total30d: data.total30d,
@@ -726,7 +705,7 @@ defillama.get("/bridges", async (c) => {
 
 		return c.json(
 			data.bridges.map((bridge: any) => ({
-				displayName: bridge.displayName,
+				name: bridge.displayName,
 				volumePrevDay: bridge.volumePrevDay || 0,
 				volumePrev2Day: bridge.volumePrev2Day || 0,
 				weeklyVolume: bridge.weeklyVolume || 0,
@@ -765,12 +744,9 @@ defillama.get("/options", async (c) => {
 
 		return c.json(
 			data.protocols.map((protocol: any) => ({
-				defillamaId: protocol.defillamaId,
-				name: protocol.name,
-				displayName: protocol.displayName,
+				name: protocol.displayName,
 				module: protocol.module,
 				category: protocol.category,
-				logo: protocol.logo,
 				chains: protocol.chains || [],
 				total24h: protocol.total24h || 0,
 				total7d: protocol.total7d || 0,
@@ -796,9 +772,7 @@ defillama.get("/options/:chain", async (c) => {
 
 		return c.json(
 			data.protocols.map((protocol: any) => ({
-				defillamaId: protocol.defillamaId,
-				name: protocol.name,
-				displayName: protocol.displayName,
+				name: protocol.displayName,
 				total24h: protocol.total24h || 0,
 				total7d: protocol.total7d || 0,
 				change_1d: protocol.change_1d || 0,
@@ -819,8 +793,7 @@ defillama.get("/options/summary/:protocol", async (c) => {
 		const data = await fetchWithCache(`https://api.llama.fi/summary/options/${protocol}`, 3600);
 
 		return c.json({
-			name: data.name,
-			displayName: data.displayName,
+			name: data.displayName,
 			total24h: data.total24h,
 			total7d: data.total7d,
 			total30d: data.total30d,
@@ -867,8 +840,7 @@ defillama.get("/open-interest/protocols", async (c) => {
 
 		return c.json(
 			filteredProtocols.map((protocol: any) => ({
-				name: protocol.name,
-				displayName: protocol.displayName,
+				name: protocol.displayName,
 				total24h: protocol.total24h || 0,
 				total7d: protocol.total7d || 0,
 				change_1d: protocol.change_1d || 0,

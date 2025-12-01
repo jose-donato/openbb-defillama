@@ -133,7 +133,7 @@ app.get("/apps.json", (c) => {
 					{
 						"i": "search_protocols",
 						"x": 0,
-						"y": 0,
+						"y": 2,
 						"w": 20,
 						"h": 20,
 						"state": {
@@ -141,12 +141,13 @@ app.get("/apps.json", (c) => {
 								"enabled": false,
 								"chartType": "line"
 							}
-						}
+						},
+						"groups": []
 					},
 					{
 						"i": "search_chains",
 						"x": 20,
-						"y": 0,
+						"y": 2,
 						"w": 20,
 						"h": 20,
 						"state": {
@@ -154,12 +155,13 @@ app.get("/apps.json", (c) => {
 								"enabled": false,
 								"chartType": "line"
 							}
-						}
+						},
+						"groups": []
 					},
 					{
 						"i": "search_stablecoins",
 						"x": 0,
-						"y": 20,
+						"y": 22,
 						"w": 20,
 						"h": 15,
 						"state": {
@@ -167,12 +169,13 @@ app.get("/apps.json", (c) => {
 								"enabled": false,
 								"chartType": "line"
 							}
-						}
+						},
+						"groups": []
 					},
 					{
 						"i": "search_dexs",
 						"x": 20,
-						"y": 20,
+						"y": 22,
 						"w": 20,
 						"h": 15,
 						"state": {
@@ -180,12 +183,13 @@ app.get("/apps.json", (c) => {
 								"enabled": false,
 								"chartType": "line"
 							}
-						}
+						},
+						"groups": []
 					},
 					{
 						"i": "search_yields",
 						"x": 0,
-						"y": 35,
+						"y": 37,
 						"w": 40,
 						"h": 15,
 						"state": {
@@ -193,7 +197,8 @@ app.get("/apps.json", (c) => {
 								"enabled": false,
 								"chartType": "line"
 							}
-						}
+						},
+						"groups": []
 					}
 				]
 			},
@@ -204,20 +209,27 @@ app.get("/apps.json", (c) => {
 					{
 						"i": "global_tvl_chart",
 						"x": 0,
-						"y": 0,
+						"y": 2,
 						"w": 40,
 						"h": 15,
 						"state": {
+							"chartModel": {
+								"modelType": "range",
+								"chartType": "line",
+								"chartOptions": {},
+								"suppressChartRanges": true
+							},
 							"chartView": {
-								"enabled": false,
+								"enabled": true,
 								"chartType": "line"
 							}
-						}
+						},
+						"groups": []
 					},
 					{
 						"i": "protocols_list",
 						"x": 0,
-						"y": 15,
+						"y": 17,
 						"w": 40,
 						"h": 20,
 						"state": {
@@ -225,12 +237,13 @@ app.get("/apps.json", (c) => {
 								"enabled": false,
 								"chartType": "line"
 							}
-						}
+						},
+						"groups": []
 					},
 					{
 						"i": "chains_list",
 						"x": 0,
-						"y": 35,
+						"y": 37,
 						"w": 40,
 						"h": 12,
 						"state": {
@@ -238,12 +251,13 @@ app.get("/apps.json", (c) => {
 								"enabled": false,
 								"chartType": "line"
 							}
-						}
+						},
+						"groups": []
 					},
 					{
 						"i": "chains_chart",
 						"x": 0,
-						"y": 47,
+						"y": 49,
 						"w": 40,
 						"h": 15,
 						"state": {
@@ -251,7 +265,8 @@ app.get("/apps.json", (c) => {
 								"enabled": false,
 								"chartType": "bar"
 							}
-						}
+						},
+						"groups": []
 					}
 				]
 			},
@@ -262,7 +277,7 @@ app.get("/apps.json", (c) => {
 					{
 						"i": "stablecoins_list",
 						"x": 0,
-						"y": 0,
+						"y": 2,
 						"w": 40,
 						"h": 18,
 						"state": {
@@ -270,25 +285,33 @@ app.get("/apps.json", (c) => {
 								"enabled": false,
 								"chartType": "line"
 							}
-						}
+						},
+						"groups": []
 					},
 					{
 						"i": "stablecoins_chart",
 						"x": 0,
-						"y": 18,
+						"y": 20,
 						"w": 40,
 						"h": 14,
 						"state": {
+							"chartModel": {
+								"modelType": "range",
+								"chartType": "line",
+								"chartOptions": {},
+								"suppressChartRanges": true
+							},
 							"chartView": {
-								"enabled": false,
+								"enabled": true,
 								"chartType": "line"
 							}
-						}
+						},
+						"groups": []
 					},
 					{
 						"i": "stablecoins_by_chain",
 						"x": 0,
-						"y": 32,
+						"y": 34,
 						"w": 40,
 						"h": 12,
 						"state": {
@@ -296,7 +319,8 @@ app.get("/apps.json", (c) => {
 								"enabled": false,
 								"chartType": "line"
 							}
-						}
+						},
+						"groups": []
 					}
 				]
 			},
@@ -307,7 +331,7 @@ app.get("/apps.json", (c) => {
 					{
 						"i": "yields_pools",
 						"x": 0,
-						"y": 0,
+						"y": 2,
 						"w": 40,
 						"h": 25,
 						"state": {
@@ -315,7 +339,8 @@ app.get("/apps.json", (c) => {
 								"enabled": false,
 								"chartType": "line"
 							}
-						}
+						},
+						"groups": []
 					}
 				]
 			},
@@ -326,7 +351,7 @@ app.get("/apps.json", (c) => {
 					{
 						"i": "dexs_list",
 						"x": 0,
-						"y": 0,
+						"y": 2,
 						"w": 40,
 						"h": 25,
 						"state": {
@@ -334,7 +359,8 @@ app.get("/apps.json", (c) => {
 								"enabled": false,
 								"chartType": "line"
 							}
-						}
+						},
+						"groups": []
 					}
 				]
 			},
@@ -345,15 +371,28 @@ app.get("/apps.json", (c) => {
 					{
 						"i": "fees_list",
 						"x": 0,
-						"y": 0,
+						"y": 2,
 						"w": 40,
 						"h": 25,
 						"state": {
 							"chartView": {
 								"enabled": false,
 								"chartType": "line"
+							},
+							"columnState": {
+								"default": {
+									"sort": {
+										"sortModel": [
+											{
+												"colId": "revenue30d",
+												"sort": "desc"
+											}
+										]
+									}
+								}
 							}
-						}
+						},
+						"groups": []
 					}
 				]
 			},
@@ -364,15 +403,27 @@ app.get("/apps.json", (c) => {
 					{
 						"i": "bridges_list",
 						"x": 0,
-						"y": 0,
+						"y": 2,
 						"w": 40,
 						"h": 25,
 						"state": {
+							"chartModel": {
+								"modelType": "range",
+								"chartType": "groupedColumn",
+								"chartOptions": {},
+								"cellRange": {
+									"columns": [
+										"displayName"
+									]
+								},
+								"suppressChartRanges": true
+							},
 							"chartView": {
 								"enabled": false,
 								"chartType": "line"
 							}
-						}
+						},
+						"groups": []
 					}
 				]
 			},
@@ -383,7 +434,7 @@ app.get("/apps.json", (c) => {
 					{
 						"i": "options_list",
 						"x": 0,
-						"y": 0,
+						"y": 2,
 						"w": 40,
 						"h": 25,
 						"state": {
@@ -391,7 +442,8 @@ app.get("/apps.json", (c) => {
 								"enabled": false,
 								"chartType": "line"
 							}
-						}
+						},
+						"groups": []
 					}
 				]
 			},
@@ -402,7 +454,7 @@ app.get("/apps.json", (c) => {
 					{
 						"i": "open_interest_stats",
 						"x": 0,
-						"y": 0,
+						"y": 2,
 						"w": 40,
 						"h": 10,
 						"state": {
@@ -410,38 +462,53 @@ app.get("/apps.json", (c) => {
 								"enabled": false,
 								"chartType": "line"
 							}
-						}
+						},
+						"groups": []
 					},
 					{
 						"i": "open_interest_chart_total",
 						"x": 0,
-						"y": 10,
+						"y": 12,
 						"w": 40,
 						"h": 15,
 						"state": {
+							"chartModel": {
+								"modelType": "range",
+								"chartType": "line",
+								"chartOptions": {},
+								"suppressChartRanges": true
+							},
 							"chartView": {
-								"enabled": false,
+								"enabled": true,
 								"chartType": "line"
 							}
-						}
+						},
+						"groups": []
 					},
 					{
 						"i": "open_interest_chart_breakdown",
 						"x": 0,
-						"y": 25,
+						"y": 27,
 						"w": 40,
 						"h": 15,
 						"state": {
+							"chartModel": {
+								"modelType": "range",
+								"chartType": "line",
+								"chartOptions": {},
+								"suppressChartRanges": true
+							},
 							"chartView": {
-								"enabled": false,
+								"enabled": true,
 								"chartType": "line"
 							}
-						}
+						},
+						"groups": []
 					},
 					{
 						"i": "open_interest_protocols",
 						"x": 0,
-						"y": 40,
+						"y": 42,
 						"w": 40,
 						"h": 20,
 						"state": {
@@ -449,7 +516,8 @@ app.get("/apps.json", (c) => {
 								"enabled": false,
 								"chartType": "line"
 							}
-						}
+						},
+						"groups": []
 					}
 				]
 			},
